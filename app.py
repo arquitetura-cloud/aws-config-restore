@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+import sys
+
+from app.loadconfigs import MenuOptions
+from typing import List
+import boto3
+from deepdiff import DeepDiff
+import json
+from simple_term_menu import TerminalMenu
+from pygments import formatters, highlight, lexers
+import os
+import jmespath
+from pprint import pprint
+
+# local list storing all history about changes
+_hidden_config_list = []
+
+
+# get all available AWS regions
+def get_regions(service_name: str) -> List[str]:
+    region_list = []
+    if len(boto3.session.Session().get_available_regions(service_name)) == 0:
+        region_list.append("Global Resource")
+    else:
+        region_list = boto3.session.Session().get_available_regions(service_name)
+    return region_list
+# list all cloudfront distributions
+def list_distributions(region):
+    client = boto3.client('cloudfront')
+    response = client.list_distributions()
+    distributions = []
+    for item in response['DistributionList']['Items']:
+        # list that will be used by the menu
+        distributions.append("Id:{} - DomainName: {} - Alias({}): {} ".format(item['Id'], item['DomainName'], str(item['Aliases']['Quantity']), item['Aliases']['Items'][0] if item['Aliases']['Quantity'] > 0 else "No Alias"))
+    return distributions
+
+
+# get config history for a given resource ID in a region
+def get_configuration_history(resource_id, region_name):
+    configurationChanges: list[str] = []
+    client = boto3.client('config', region_name=region_name)
+    response = client.get_resource_config_history(
+        resourceType='AWS::CloudFront::Distribution',
+        resourceId=resource_id,
+        limit=10
+    )
+    for item in response['configurationItems']:
+        # local list storing all history about changes
+        _hidden_config_list.append(item)
+        # list that will be used by the menu
+        configurationChanges.append("ChangeID: {} - Date: {} - Status: {}".format(item['configurationStateId'],
+                                                                                  item['configurationItemCaptureTime'],
+                                                                                  item['configurationItemStatus']))
+    return configurationChanges
+
+
+# preview a configuration change
+def preview_configuration(selectedConfiguration):
+    configurationChangeId = selectedConfiguration.split(" - ")[0].replace("ChangeID: ", "")
+    # retrieve the configuration from _hidden_config_list by mathing with its configurationStateId
+    for item in _hidden_config_list:
+        # print("DEBUG: {} == {} -> {} #####".format(item['configurationStateId'], configurationChangeId, item['configurationStateId'] == configurationChangeId))
+        if item['configurationStateId'] == configurationChangeId:
+            configurationJson = json.loads(item['configuration'])
+            lexer = lexers.get_lexer_by_name("json", stripnl=False, stripall=False)
+            formatter = formatters.TerminalFormatter(bg="dark")  # dark or light
+            highlighted_file_content = highlight(json.dumps(configurationJson, indent=4), lexer, formatter)
+            return highlighted_file_content
+
+
+# compare two configurations
+def compare_configurations(newConfig, oldConfig):
+    # here I compare FROM config2(older) to config1(newer)
+    result = DeepDiff(json.loads(oldConfig), json.loads(newConfig), ignore_order=True)
+    # iterate and print all differences
+    print(result)
+
+
+def menu():
+    # Main menu asking for user to select a supported AWS Service:
+    main_menu_items = MenuOptions().__call__()
+    main_menu_title = "Select a supported AWS Service"
+    main_menu_cursor = "> "
+    main_menu_cursor_style = ("fg_red", "bold")
+    main_menu_style = ("bg_red", "fg_yellow")
+    main_menu_exit = False
+
+    main_terminal_menu = TerminalMenu(
+        title=main_menu_title,
+        show_search_hint=True,
+        menu_entries=main_menu_items,
+        menu_cursor=main_menu_cursor,
+        menu_cursor_style=main_menu_cursor_style,
+        menu_highlight_style=main_menu_style,
+        cycle_cursor=True,
+        clear_screen=True,
+                                      )
+    while not main_menu_exit:
+        menu_entry_index = main_terminal_menu.show()
+        if menu_entry_index == len(main_menu_items) or main_menu_items[menu_entry_index] == "Quit":
+            main_menu_exit = True
+            sys.exit(0)
+        else:
+            region_menu_title = f" {main_menu_items[menu_entry_index]}.\n Select Region. \n"
+            region_menu_items = get_regions(MenuOptions().get_service_name(main_menu_items[menu_entry_index]))
+            region_menu_items.append("Back to previous Menu")
+            region_menu_back = False
+            region_menu = TerminalMenu(
+                region_menu_items,
+                title=region_menu_title,
+                menu_cursor=main_menu_cursor,
+                menu_cursor_style=main_menu_cursor_style,
+                menu_highlight_style=main_menu_style,
+                cycle_cursor=True,
+                clear_screen=True,
+                show_search_hint=True,
+            )
+
+            while not region_menu_back:
+                region_menu_entry_index = region_menu.show()
+                if region_menu_entry_index == len(region_menu_items) or region_menu_entry_index == None or region_menu_items[region_menu_entry_index] == "Back to previous Menu":
+                    region_menu_back = True
+                    main_menu_exit = False
+                    break
+                else:
+                    service_menu_title = f" {main_menu_items[menu_entry_index]} > {region_menu_items[region_menu_entry_index]}.\n Select Resource. "
+                    service_menu_items = list_distributions({region_menu_items[region_menu_entry_index]})
+                    service_menu_items.append("Back to previous Menu")
+                    service_menu_back = False
+                    service_menu = TerminalMenu(
+                        service_menu_items,
+                        title=service_menu_title,
+                        menu_cursor=main_menu_cursor,
+                        menu_cursor_style=main_menu_cursor_style,
+                        menu_highlight_style=main_menu_style,
+                        cycle_cursor=True,
+                        clear_screen=True,
+                    )
+                    while not service_menu_back:
+                        service_menu_entry_index = service_menu.show()
+                        if service_menu_entry_index == len(service_menu_items) or service_menu_entry_index == None or service_menu_items[service_menu_entry_index] == "Back to previous Menu":
+                            service_menu_back = True
+                            region_menu_back = False
+                            main_menu_exit = False
+                            break
+                        else:
+                            print('Do nasty stuff')
+                            distributionId = service_menu_items[service_menu_entry_index].split(" - ")[0].split(":")[1]
+                            print(distributionId)
+                            sys.exit(0)
+    # list all available AWS regions and displays a menu
+    menu_items = []
+    regions = get_regions()
+    # Add Quit Option to  menu
+    regions.append("Quit")
+
+    terminal_menu = TerminalMenu(regions, title="Select the region your config Service is running",
+                                 show_search_hint=True)
+    menu_entry_index = terminal_menu.show()
+
+    # get the selected region
+    region_name = regions[menu_entry_index]
+
+    # list all distributions and display a menu
+    distributions = list_distributions()
+    terminal_menu = TerminalMenu(distributions, title="Select a distribution")
+    menu_entry_index = terminal_menu.show()
+
+    # get the selected distribution ID
+    distributionId = distributions[menu_entry_index].split(" - ")[0]
+
+    # get configuration changes for the selected distribution and create a menu
+    configurationList = get_configuration_history(distributionId, region_name)
+    terminal_menu = TerminalMenu(configurationList, title="Select a configuration change",
+                                 preview_command=preview_configuration, preview_size=0.75)
+    menu_entry_index = terminal_menu.show()
+
+    # get the selected configuration ID
+    configurationChangeId = configurationList[menu_entry_index].split(" - ")[0].replace("ChangeID: ", "")
+
+    # apply the selected configuration to  the selected distribution
+    apply_configuration(distributionId, configurationChangeId)
+
+
+def apply_configuration(distributionId, configurationChangeId):
+    """Applies a configuration to a distribution
+
+    Args:
+        distributionId (_type_): Cloudfront distribution ID
+        configurationChangeId (_type_): Configuration Change ID from AWS Config
+    """
+    # retrieve the configuration from _hidden_config_list by mathing with its configurationStateId
+    config = json.loads(__search_configuration_local(configurationChangeId))
+    if config is not None:
+        converted_config = __convert_history_item_into_next_config(config)
+        # apply the configuration to the distribution
+        client = boto3.client('cloudfront')
+        response = client.update_distribution(
+            Id=distributionId,
+            DistributionConfig=converted_config,
+            IfMatch=__get_distribution_etag(distributionId)
+        )
+        print("Configuration applied to distribution {}".format(distributionId))
+
+
+# get current cloudfront distribution configuration etag
+def __get_distribution_etag(distributionId):
+    client = boto3.client('cloudfront')
+    response = client.get_distribution(
+        Id=distributionId
+    )
+    return response['ETag']
+
+
+# helper method to find a configuration at local cache
+def __search_configuration_local(configurationChangeId):
+    for item in _hidden_config_list:
+        if item['configurationStateId'] == configurationChangeId:
+            return item['configuration']
+
+
+# helper method to capitalize json key names
+def __capitalize_json_elements(x):
+    if isinstance(x, list):
+        return [__capitalize_json_elements(v) for v in x]
+    elif isinstance(x, dict):
+        return {k[0].upper() + k[1:]: __capitalize_json_elements(v) for k, v in x.items()}
+    else:
+        return x
+
+
+# helper method to convert a past config into a deployable config
+def __convert_history_item_into_next_config(config):
+    new_config = json.loads(json.dumps(config['distributionConfig']))
+    new_config = __capitalize_json_elements(new_config)
+    new_config['ViewerCertificate']['SSLSupportMethod'] = new_config['ViewerCertificate'].pop(
+        'SslSupportMethod')  # manually changed, due to expected API format
+
+    return new_config
+
+
+# def highlight_change(configurationChangeId):
+
+# with open(filepath, "r") as f:
+#     file_content = f.read()
+# try:
+#     lexer = lexers.get_lexer_for_filename(filepath, stripnl=False, stripall=False)
+# except ClassNotFound:
+#     lexer = lexers.get_lexer_by_name("text", stripnl=False, stripall=False)
+# formatter = formatters.TerminalFormatter(bg="dark")  # dark or light
+# highlighted_file_content = highlight(file_content, lexer, formatter)
+# return highlighted_file_content
+
+
+# main function
+def main():
+    # displays the initial menu
+    menu()
+
+
+# main handler
+if __name__ == "__main__":
+    main()

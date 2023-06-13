@@ -1,0 +1,20 @@
+case_mappings:
+  waf:
+  cloudfront:
+  route53:
+menu_options:
+  waf:
+    DisplayName: 'AWS WAF'
+    ResourceTypes:
+      - 'AWS::WAFv2::WebACL'
+    ServiceName: 'wafv2'
+  cloudfront:
+    DisplayName: 'AWS Cloudfront'
+    ResourceTypes:
+      - 'AWS::CloudFront::Distribution'
+    ServiceName: 'cloudfront'
+  route53:
+    DisplayName: 'AWS Route53'
+    ResourceTypes:
+      - 'AWS::CloudFront::Distribution'
+    ServiceName: 'route53'

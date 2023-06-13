@@ -1,0 +1,79 @@
+{
+    "configurationItems": [
+        {
+            "version": "1.3",
+            "accountId": "673826570926",
+            "configurationItemCaptureTime": "2023-05-20 20:03:30.042000-03:00",
+            "configurationItemStatus": "OK",
+            "configurationStateId": "1684623810042",
+            "configurationItemMD5Hash": "",
+            "arn": "arn:aws:cloudfront::673826570926:distribution/E1BA3MK4ICDS85",
+            "resourceType": "AWS::CloudFront::Distribution",
+            "resourceId": "E1BA3MK4ICDS85",
+            "awsRegion": "global",
+            "availabilityZone": "Not Applicable",
+            "resourceCreationTime": "2023-05-19 16:19:09.828000-03:00",
+            "tags": {},
+            "relatedEvents": [],
+            "relationships": [
+                {
+                    "resourceType": "AWS::S3::Bucket",
+                    "resourceId": "cloudfrontpsource-vinibat",
+                    "resourceName": "cloudfrontpsource-vinibat",
+                    "relationshipName": "Is associated with "
+                },
+                {
+                    "resourceType": "AWS::WAFv2::WebACL",
+                    "resourceId": "arn:aws:wafv2:us-east-1:673826570926:global/webacl/CreatedByCloudFront-d9d567f5-eb79-4e02-9f32-ab279fa2a0b5/0b8f1f19-b649-4ce6-ae20-d06bcf2070fa",
+                    "relationshipName": "Is associated with "
+                }
+            ],
+            "configuration": "{\"arn\":\"arn:aws:cloudfront::673826570926:distribution/E1BA3MK4ICDS85\",\"id\":\"E1BA3MK4ICDS85\",\"lastModifiedTime\":\"2023-05-20T23:03:29.142Z\",\"activeTrustedSigners\":{\"quantity\":0,\"enabled\":false},\"domainName\":\"d14vwa0qn6ebcq.cloudfront.net\",\"activeTrustedKeyGroups\":{\"quantity\":0,\"enabled\":false},\"distributionConfig\":{\"origins\":{\"quantity\":1,\"items\":[{\"connectionAttempts\":3,\"customHeaders\":{\"quantity\":0},\"domainName\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\",\"connectionTimeout\":10,\"s3OriginConfig\":{\"originAccessIdentity\":\"\"},\"originShield\":{\"enabled\":false},\"originAccessControlId\":\"\",\"originPath\":\"\",\"id\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\"}]},\"aliases\":{\"quantity\":0},\"defaultCacheBehavior\":{\"functionAssociations\":{\"quantity\":0},\"lambdaFunctionAssociations\":{\"quantity\":0},\"fieldLevelEncryptionId\":\"\",\"trustedSigners\":{\"enabled\":false,\"quantity\":0},\"trustedKeyGroups\":{\"enabled\":false,\"quantity\":0},\"cachePolicyId\":\"658327ea-f89d-4fab-a63d-7e88639e58f6\",\"allowedMethods\":{\"items\":[\"HEAD\",\"GET\"],\"quantity\":2,\"cachedMethods\":{\"items\":[\"HEAD\",\"GET\"],\"quantity\":2}},\"smoothStreaming\":false,\"targetOriginId\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\",\"viewerProtocolPolicy\":\"https-only\",\"compress\":false},\"callerReference\":\"d35dab3d-507c-49c8-9b06-76f74cb8683e\",\"staging\":false,\"webACLId\":\"arn:aws:wafv2:us-east-1:673826570926:global/webacl/CreatedByCloudFront-d9d567f5-eb79-4e02-9f32-ab279fa2a0b5/0b8f1f19-b649-4ce6-ae20-d06bcf2070fa\",\"defaultRootObject\":\"\",\"customErrorResponses\":{\"quantity\":0},\"enabled\":true,\"cacheBehaviors\":{\"quantity\":0},\"continuousDeploymentPolicyId\":\"\",\"httpVersion\":\"http2\",\"comment\":\"\",\"restrictions\":{\"geoRestriction\":{\"restrictionType\":\"whitelist\",\"items\":[\"BR\"],\"quantity\":1}},\"logging\":{\"includeCookies\":false,\"prefix\":\"\",\"bucket\":\"\",\"enabled\":false},\"isIPV6Enabled\":true,\"viewerCertificate\":{\"cloudFrontDefaultCertificate\":true,\"certificateSource\":\"cloudfront\",\"sslSupportMethod\":\"vip\",\"minimumProtocolVersion\":\"TLSv1\"},\"priceClass\":\"PriceClass_All\",\"originGroups\":{\"quantity\":0}}}",
+            "supplementaryConfiguration": {}
+        },
+        {
+            "version": "1.3",
+            "accountId": "673826570926",
+            "configurationItemCaptureTime": "2023-05-20 19:45:31.555000-03:00",
+            "configurationItemStatus": "ResourceDiscovered",
+            "configurationStateId": "1684622731555",
+            "configurationItemMD5Hash": "",
+            "arn": "arn:aws:cloudfront::673826570926:distribution/E1BA3MK4ICDS85",
+            "resourceType": "AWS::CloudFront::Distribution",
+            "resourceId": "E1BA3MK4ICDS85",
+            "awsRegion": "global",
+            "availabilityZone": "Not Applicable",
+            "resourceCreationTime": "2023-05-19 16:19:09.828000-03:00",
+            "tags": {},
+            "relatedEvents": [],
+            "relationships": [
+                {
+                    "resourceType": "AWS::S3::Bucket",
+                    "resourceId": "cloudfrontpsource-vinibat",
+                    "resourceName": "cloudfrontpsource-vinibat",
+                    "relationshipName": "Is associated with "
+                },
+                {
+                    "resourceType": "AWS::WAFv2::WebACL",
+                    "resourceId": "arn:aws:wafv2:us-east-1:673826570926:global/webacl/CreatedByCloudFront-d9d567f5-eb79-4e02-9f32-ab279fa2a0b5/0b8f1f19-b649-4ce6-ae20-d06bcf2070fa",
+                    "relationshipName": "Is associated with "
+                }
+            ],
+            "configuration": "{\"arn\":\"arn:aws:cloudfront::673826570926:distribution/E1BA3MK4ICDS85\",\"id\":\"E1BA3MK4ICDS85\",\"lastModifiedTime\":\"2023-05-20T22:29:04.488Z\",\"activeTrustedSigners\":{\"quantity\":0,\"enabled\":false},\"domainName\":\"d14vwa0qn6ebcq.cloudfront.net\",\"activeTrustedKeyGroups\":{\"quantity\":0,\"enabled\":false},\"distributionConfig\":{\"origins\":{\"quantity\":1,\"items\":[{\"connectionAttempts\":3,\"customHeaders\":{\"quantity\":0},\"domainName\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\",\"connectionTimeout\":10,\"s3OriginConfig\":{\"originAccessIdentity\":\"\"},\"originShield\":{\"enabled\":false},\"originAccessControlId\":\"\",\"originPath\":\"\",\"id\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\"}]},\"aliases\":{\"quantity\":0},\"defaultCacheBehavior\":{\"functionAssociations\":{\"quantity\":0},\"lambdaFunctionAssociations\":{\"quantity\":0},\"fieldLevelEncryptionId\":\"\",\"trustedSigners\":{\"enabled\":false,\"quantity\":0},\"trustedKeyGroups\":{\"enabled\":false,\"quantity\":0},\"cachePolicyId\":\"658327ea-f89d-4fab-a63d-7e88639e58f6\",\"allowedMethods\":{\"items\":[\"HEAD\",\"GET\"],\"quantity\":2,\"cachedMethods\":{\"items\":[\"HEAD\",\"GET\"],\"quantity\":2}},\"smoothStreaming\":false,\"targetOriginId\":\"cloudfrontpsource-vinibat.s3.sa-east-1.amazonaws.com\",\"viewerProtocolPolicy\":\"https-only\",\"compress\":true},\"callerReference\":\"d35dab3d-507c-49c8-9b06-76f74cb8683e\",\"staging\":false,\"webACLId\":\"arn:aws:wafv2:us-east-1:673826570926:global/webacl/CreatedByCloudFront-d9d567f5-eb79-4e02-9f32-ab279fa2a0b5/0b8f1f19-b649-4ce6-ae20-d06bcf2070fa\",\"defaultRootObject\":\"\",\"customErrorResponses\":{\"quantity\":0},\"enabled\":true,\"cacheBehaviors\":{\"quantity\":0},\"continuousDeploymentPolicyId\":\"\",\"httpVersion\":\"http2\",\"comment\":\"\",\"restrictions\":{\"geoRestriction\":{\"restrictionType\":\"whitelist\",\"items\":[\"BR\"],\"quantity\":1}},\"logging\":{\"includeCookies\":false,\"prefix\":\"\",\"bucket\":\"\",\"enabled\":false},\"isIPV6Enabled\":true,\"viewerCertificate\":{\"cloudFrontDefaultCertificate\":true,\"certificateSource\":\"cloudfront\",\"sslSupportMethod\":\"vip\",\"minimumProtocolVersion\":\"TLSv1\"},\"priceClass\":\"PriceClass_All\",\"originGroups\":{\"quantity\":0}}}",
+            "supplementaryConfiguration": {}
+        }
+    ],
+    "nextToken": "eyJlbmNyeXB0ZWREYXRhIjpbMTI0LDE4LC01NywtOTEsLTMyLC04MiwxMDEsLTk1LDExMywtMzUsODcsLTkxLDI0LC04OCwxMDIsMjUsNiwxMywtMzUsMTAwLC0xMTgsNywzOSw0MCwxMTksLTUsLTU1LDUxLC0zMiwtMTIsNTEsLTM5LC05NywtMTA3LC02OSw3MywtMTI2LDgwLDYyLDkwLC02Nyw3NCwtOSwtMTEyLC02NCwtMTA5LDQ4LC0xMDQsLTE4LC02NCw5LC0xMjIsLTg0LDExNywtMTE5LDg4LC03LDU1LDEyLC0xMDgsNzMsLTYxLC01NCwxMjAsMTA4LC0xMTIsLTg0LDMxLDI0LC0xMTgsMTYsNDQsLTE4LC0xMDAsLTMsMzYsLTcwLDUyLC02NSw3Niw4MywtNTcsOTgsLTEyLC02MSw5Myw1MSwtNTEsNDQsLTk1LC04LDc5LDExLDg4LC0xNCwxMTUsLTIxLDIsNzUsLTEyOCwzNSw0OSwtODksLTI1LC05NCwtMTA3LDc3LDI1LC00MCwtNjYsLTU3LDY1LC03LC0zNiwtNCwtOSw0MSwtMzgsLTg1LC0yNCwtNjEsLTMxLC01MCwtMywtNzgsLTc3LC0zMSwxMTcsMzgsODMsLTc2LDU4LDc4LDQ2LC0yNCwxMjAsLTUyLC0xMDIsNjQsNTUsNTMsNTcsNjQsLTQ1LDk5LDUxLC0yNiw4MywxMTIsLTExNSw5OCwtNzYsMTcsNCwxMyw3MSwtOTIsMTQsMjAsMTEzLDcxLC0zMywtMTYsLTUxLDYyLC03Nl0sIm1hdGVyaWFsU2V0U2VyaWFsTnVtYmVyIjoxLCJpdlBhcmFtZXRlclNwZWMiOnsiaXYiOls3MSw1LC04MiwtODUsMTUsNzUsMSwxMywxMjAsNjcsLTE4LDQ4LC02MiwxMjEsMTI0LC01NV19fQ==",
+    "ResponseMetadata": {
+        "RequestId": "d10dae1f-696a-45fb-9df5-cffb7e8614e6",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "x-amzn-requestid": "d10dae1f-696a-45fb-9df5-cffb7e8614e6",
+            "strict-transport-security": "max-age=86400",
+            "content-type": "application/x-amz-json-1.1",
+            "content-length": "7458",
+            "date": "Fri, 26 May 2023 21:12:12 GMT"
+        },
+        "RetryAttempts": 0
+    }
+}
