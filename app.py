@@ -36,7 +36,7 @@ def list_distributions(region):
 
 
 # get config history for a given resource ID in a region
-def get_configuration_history(resource_id, region_name):
+def get_configuration_history(resource_id, region_name=None):
     configurationChanges: list[str] = []
     client = boto3.client('config', region_name=region_name)
     response = client.get_resource_config_history(
@@ -146,40 +146,62 @@ def menu():
                         else:
                             print('Do nasty stuff')
                             distributionId = service_menu_items[service_menu_entry_index].split(" - ")[0].split(":")[1]
-                            print(distributionId)
-                            sys.exit(0)
-    # list all available AWS regions and displays a menu
-    menu_items = []
-    regions = get_regions()
-    # Add Quit Option to  menu
-    regions.append("Quit")
+                            configurationList = get_configuration_history(distributionId, region_name=None)
+                            configuration_menu_title = f" {main_menu_items[menu_entry_index]} > {region_menu_items[region_menu_entry_index]} > {distributionId}.\n Select Configuration: "
+                            configuration_menu_items = configurationList
+                            configuration_menu_items.append("Back to previous Menu")
+                            configuration_menu_back = False
+                            configuration_menu = TerminalMenu(
+                                configuration_menu_items,
+                                title=configuration_menu_title,
+                                menu_cursor=main_menu_cursor,
+                                menu_cursor_style=main_menu_cursor_style,
+                                menu_highlight_style=main_menu_style,
+                                cycle_cursor=True,
+                                clear_screen=True,
+                                show_search_hint=False,
+                                preview_command=preview_configuration,
+                                preview_size=0.75,
+                            )
 
-    terminal_menu = TerminalMenu(regions, title="Select the region your config Service is running",
-                                 show_search_hint=True)
-    menu_entry_index = terminal_menu.show()
+                            while not configuration_menu_back:
+                                configuration_menu_entry_index = configuration_menu.show()
+                                if configuration_menu_entry_index == len(configuration_menu_items) or configuration_menu_entry_index == None or configuration_menu_items[configuration_menu_entry_index] == "Back to previous Menu":
+                                    configuration_menu_back = True
+                                    service_menu_back = False
+                                    break
+                                else:
+                                    configurationChangeId = configuration_menu_items[configuration_menu_entry_index].split(" - ")[0].replace("ChangeID: ", "")
+                                    yesno_menu_title = f" {main_menu_items[menu_entry_index]} > {region_menu_items[region_menu_entry_index]} > {distributionId} > {configurationChangeId}.\n Apply Configuration? "
+                                    yesno_menu_items = ['Yes', 'No', 'Back to previous Menu']
+                                    yesno_menu_back = False
+                                    yesno_menu = TerminalMenu(
+                                        yesno_menu_items,
+                                        title=yesno_menu_title,
+                                        menu_cursor=main_menu_cursor,
+                                        menu_cursor_style=main_menu_cursor_style,
+                                        menu_highlight_style=main_menu_style,
+                                        cycle_cursor=True,
+                                        clear_screen=True,
+                                        show_search_hint=False,
+                                    )
 
-    # get the selected region
-    region_name = regions[menu_entry_index]
-
-    # list all distributions and display a menu
-    distributions = list_distributions()
-    terminal_menu = TerminalMenu(distributions, title="Select a distribution")
-    menu_entry_index = terminal_menu.show()
-
-    # get the selected distribution ID
-    distributionId = distributions[menu_entry_index].split(" - ")[0]
-
-    # get configuration changes for the selected distribution and create a menu
-    configurationList = get_configuration_history(distributionId, region_name)
-    terminal_menu = TerminalMenu(configurationList, title="Select a configuration change",
-                                 preview_command=preview_configuration, preview_size=0.75)
-    menu_entry_index = terminal_menu.show()
-
-    # get the selected configuration ID
-    configurationChangeId = configurationList[menu_entry_index].split(" - ")[0].replace("ChangeID: ", "")
-
-    # apply the selected configuration to  the selected distribution
-    apply_configuration(distributionId, configurationChangeId)
+                                    while not yesno_menu_back:
+                                        yesno_menu_entry_index = yesno_menu.show()
+                                        if yesno_menu_entry_index == len(yesno_menu_items) or yesno_menu_entry_index == None or yesno_menu_items[yesno_menu_entry_index] == "Back to previous Menu":
+                                            yesno_menu_back = True
+                                            break
+                                        elif yesno_menu_items[yesno_menu_entry_index] == 'Yes':
+                                            #apply_configuration(distributionId, configurationChangeId)
+                                            print('Apply config!')
+                                            sys.exit(0)
+                                            yesno_menu_back = True
+                                            break
+                                        elif yesno_menu_items[yesno_menu_entry_index] == 'No':
+                                            yesno_menu_back = True
+                                            break
+                                        else:
+                                            break
 
 
 def apply_configuration(distributionId, configurationChangeId):
