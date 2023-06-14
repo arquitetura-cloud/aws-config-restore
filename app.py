@@ -146,7 +146,7 @@ def menu():
                         else:
                             print('Do nasty stuff')
                             distributionId = service_menu_items[service_menu_entry_index].split(" - ")[0].split(":")[1]
-                            configurationList = get_configuration_history(distributionId, region_name=None)
+                            configurationList = get_configuration_history(distributionId)
                             configuration_menu_title = f" {main_menu_items[menu_entry_index]} > {region_menu_items[region_menu_entry_index]} > {distributionId}.\n Select Configuration: "
                             configuration_menu_items = configurationList
                             configuration_menu_items.append("Back to previous Menu")
@@ -192,11 +192,14 @@ def menu():
                                             yesno_menu_back = True
                                             break
                                         elif yesno_menu_items[yesno_menu_entry_index] == 'Yes':
-                                            #apply_configuration(distributionId, configurationChangeId)
-                                            print('Apply config!')
-                                            sys.exit(0)
+                                            apply_configuration(distributionId, configurationChangeId)
+                                            print('Configuration Applied!')
+                                            input("Press Enter to continue...")
                                             yesno_menu_back = True
+                                            service_menu_back = True
+                                            region_menu_back = True
                                             break
+
                                         elif yesno_menu_items[yesno_menu_entry_index] == 'No':
                                             yesno_menu_back = True
                                             break
