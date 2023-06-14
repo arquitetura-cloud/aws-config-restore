@@ -36,7 +36,7 @@ def list_distributions(region):
 
 
 # get config history for a given resource ID in a region
-def get_configuration_history(resource_id, region_name=None):
+def get_configuration_history(resource_id, region_name='us-east-1'):
     configurationChanges: list[str] = []
     client = boto3.client('config', region_name=region_name)
     response = client.get_resource_config_history(
