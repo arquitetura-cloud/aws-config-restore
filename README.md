@@ -2,13 +2,14 @@
  - Clone this repo
  - `pip install -r requirements.txt`
  - `cd aws_config_restore`
-
+ - `cd app`
+    ### Run
+    ` python -m app`
 ## Install as pip package
 
 - pip install aws-config-restore
-- `aws-config-restore`
-## Run
-` python app.py`
+- ` aws-config-restore`
+
 
 ## Config References:
 https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html

@@ -3,7 +3,7 @@ class MenuOptions:
     def __init__(self):
         import os
         print(os.getcwd())
-        with open('app/data/config.yaml', 'r') as config_file:
+        with open('./data/config.yaml', 'r') as config_file:
             menu_yaml = config_file.read()
         self.menu_data = yaml.safe_load(menu_yaml)
 

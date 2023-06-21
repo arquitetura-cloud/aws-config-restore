@@ -1,8 +1,16 @@
 LICENSE
+MANIFEST.in
 README.md
+pyproject.toml
 setup.py
 app/app.py
+app/data/config.yaml
+app/data/reference_cloudfront.json
+app/examples/configexample.json
+app/examples/example.json
 aws_config_restore.egg-info/PKG-INFO
 aws_config_restore.egg-info/SOURCES.txt
 aws_config_restore.egg-info/dependency_links.txt
+aws_config_restore.egg-info/entry_points.txt
+aws_config_restore.egg-info/requires.txt
 aws_config_restore.egg-info/top_level.txt
