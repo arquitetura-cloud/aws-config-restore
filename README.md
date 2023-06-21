@@ -1,10 +1,9 @@
-## Install as script
+## Install locallly
  - Clone this repo
- - `pip install -r requirements.txt`
  - `cd aws_config_restore`
- - `cd app`
+ - `python -m pip install -e .`
     ### Run
-    ` python -m app`
+    ` aws-config-restore`
 ## Install as pip package
 
 - pip install aws-config-restore

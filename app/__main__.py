@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys
 
-from app.loadconfigs import MenuOptions
-from app.normalizeparameters import NormalizeParameters
+from app.app.loadconfigs import MenuOptions
+from app.app.normalizeparameters import NormalizeParameters
 from typing import List
 import boto3
 import botocore.exceptions

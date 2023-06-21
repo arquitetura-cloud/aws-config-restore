@@ -1,9 +1,11 @@
 import yaml
+import os
 class MenuOptions:
     def __init__(self):
-        import os
-        print(os.getcwd())
-        with open('./data/config.yaml', 'r') as config_file:
+        print(__file__)
+        datapath = os.path.join(os.path.dirname(__file__), '../data/config.yaml')
+        normpath = os.path.normpath(datapath)
+        with open(normpath, 'r') as config_file:
             menu_yaml = config_file.read()
         self.menu_data = yaml.safe_load(menu_yaml)
 

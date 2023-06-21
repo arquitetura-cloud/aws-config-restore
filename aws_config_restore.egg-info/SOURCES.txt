@@ -3,11 +3,12 @@ MANIFEST.in
 README.md
 pyproject.toml
 setup.py
-app/app.py
+app/__main__.py
+app/app/__init__.py
+app/app/loadconfigs.py
+app/app/normalizeparameters.py
 app/data/config.yaml
 app/data/reference_cloudfront.json
-app/examples/configexample.json
-app/examples/example.json
 aws_config_restore.egg-info/PKG-INFO
 aws_config_restore.egg-info/SOURCES.txt
 aws_config_restore.egg-info/dependency_links.txt

@@ -1,2 +1,2 @@
 [console_scripts]
-aws-config-restore = app.app:main
+aws-config-restore = app.__main__:main

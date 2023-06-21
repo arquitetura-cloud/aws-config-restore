@@ -36,17 +36,17 @@ Description-Content-Type: text/markdown
 Provides-Extra: dev
 License-File: LICENSE
 
-## Install as script
+## Install locallly
  - Clone this repo
- - `pip install -r requirements.txt`
  - `cd aws_config_restore`
-
+ - `python -m pip install -e .`
+    ### Run
+    ` aws-config-restore`
 ## Install as pip package
 
 - pip install aws-config-restore
-- `aws-config-restore`
-## Run
-` python app.py`
+- ` aws-config-restore`
+
 
 ## Config References:
 https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html
