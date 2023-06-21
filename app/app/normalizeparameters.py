@@ -6,7 +6,7 @@ new_to_restore_config_str = ""
 
 class NormalizeParameters:
     def __init__(self, to_restore_config, baseconfig=None):
-        datapath = os.path.join(os.path.dirname(__file__), '../data/config.yaml')
+        datapath = os.path.join(os.path.dirname(__file__), '../data/reference_cloudfront.json')
         normpath = os.path.normpath(datapath)
         with open(normpath) as f:
             self.base_config = json.load(f)
