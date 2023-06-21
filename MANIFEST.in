@@ -1,0 +1,4 @@
+# MANIFEST.in
+
+include app/data/*
+include app/examples/*.json
