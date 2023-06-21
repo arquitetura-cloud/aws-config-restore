@@ -1,7 +1,7 @@
 ## Install as script
  - Clone this repo
  - `pip install -r requirements.txt`
- - `cd aws config restore`
+ - `cd aws_config_restore`
 
 ## Install as pip package
 
