@@ -1,12 +1,14 @@
 import json
 from deepdiff import DeepSearch, extract
-
+import os
 new_to_restore_config_str = ""
 
 
 class NormalizeParameters:
     def __init__(self, to_restore_config, baseconfig=None):
-        with open('../data/reference_cloudfront.json') as f:
+        datapath = os.path.join(os.path.dirname(__file__), '../data/config.yaml')
+        normpath = os.path.normpath(datapath)
+        with open(normpath) as f:
             self.base_config = json.load(f)
         f.close()
 
