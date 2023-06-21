@@ -2,8 +2,10 @@
 import sys
 
 from app.loadconfigs import MenuOptions
+from app.normalizeparameters import NormalizeParameters
 from typing import List
 import boto3
+import botocore.exceptions
 from deepdiff import DeepDiff
 import json
 from simple_term_menu import TerminalMenu
@@ -15,6 +17,12 @@ from pprint import pprint
 # local list storing all history about changes
 _hidden_config_list = []
 
+#main error handler
+
+def error_handler(CliError):
+    print(f'Error! \n {CliError} \n Are your access or credentias valid ?')
+    input("Press Enter to Continue")
+    menu()
 
 # get all available AWS regions
 def get_regions(service_name: str) -> List[str]:
@@ -27,32 +35,37 @@ def get_regions(service_name: str) -> List[str]:
 # list all cloudfront distributions
 def list_distributions(region):
     client = boto3.client('cloudfront')
-    response = client.list_distributions()
-    distributions = []
-    for item in response['DistributionList']['Items']:
-        # list that will be used by the menu
-        distributions.append("Id:{} - DomainName: {} - Alias({}): {} ".format(item['Id'], item['DomainName'], str(item['Aliases']['Quantity']), item['Aliases']['Items'][0] if item['Aliases']['Quantity'] > 0 else "No Alias"))
-    return distributions
-
+    try:
+        response = client.list_distributions()
+        distributions = []
+        for item in response['DistributionList']['Items']:
+            # list that will be used by the menu
+            distributions.append("Id:{} - DomainName: {} - Alias({}): {} ".format(item['Id'], item['DomainName'], str(item['Aliases']['Quantity']), item['Aliases']['Items'][0] if item['Aliases']['Quantity'] > 0 else "No Alias"))
+        return distributions
+    except botocore.exceptions.ClientError as CliError:
+         error_handler(CliError)
 
 # get config history for a given resource ID in a region
 def get_configuration_history(resource_id, region_name='us-east-1'):
     configurationChanges: list[str] = []
-    client = boto3.client('config', region_name=region_name)
-    response = client.get_resource_config_history(
-        resourceType='AWS::CloudFront::Distribution',
-        resourceId=resource_id,
-        limit=10
-    )
-    for item in response['configurationItems']:
-        # local list storing all history about changes
-        _hidden_config_list.append(item)
-        # list that will be used by the menu
-        configurationChanges.append("ChangeID: {} - Date: {} - Status: {}".format(item['configurationStateId'],
-                                                                                  item['configurationItemCaptureTime'],
-                                                                                  item['configurationItemStatus']))
-    return configurationChanges
 
+    try:
+        client = boto3.client('config', region_name=region_name)
+        response = client.get_resource_config_history(
+            resourceType='AWS::CloudFront::Distribution',
+            resourceId=resource_id,
+            limit=10
+        )
+        for item in response['configurationItems']:
+            # local list storing all history about changes
+            _hidden_config_list.append(item)
+            # list that will be used by the menu
+            configurationChanges.append("ChangeID: {} - Date: {} - Status: {}".format(item['configurationStateId'],
+                                                                                      item['configurationItemCaptureTime'],
+                                                                                      item['configurationItemStatus']))
+        return configurationChanges
+    except botocore.exceptions.ClientError as CliError:
+        error_handler(CliError)
 
 # preview a configuration change
 def preview_configuration(selectedConfiguration):
@@ -144,7 +157,7 @@ def menu():
                             main_menu_exit = False
                             break
                         else:
-                            print('Do nasty stuff')
+                            #print('Do nasty stuff')
                             distributionId = service_menu_items[service_menu_entry_index].split(" - ")[0].split(":")[1]
                             configurationList = get_configuration_history(distributionId)
                             configuration_menu_title = f" {main_menu_items[menu_entry_index]} > {region_menu_items[region_menu_entry_index]} > {distributionId}.\n Select Configuration: "
@@ -218,15 +231,22 @@ def apply_configuration(distributionId, configurationChangeId):
     config = json.loads(__search_configuration_local(configurationChangeId))
     if config is not None:
         converted_config = __convert_history_item_into_next_config(config)
-        # apply the configuration to the distribution
-        client = boto3.client('cloudfront')
-        response = client.update_distribution(
-            Id=distributionId,
-            DistributionConfig=converted_config,
-            IfMatch=__get_distribution_etag(distributionId)
-        )
-        print("Configuration applied to distribution {}".format(distributionId))
-
+        print(f'------\n {converted_config}')
+        normalize_converted_config = NormalizeParameters(converted_config).normalize()
+        print(f'------\n {normalize_converted_config}')
+        try:
+            # apply the configuration to the distribution
+            client = boto3.client('cloudfront')
+            response = client.update_distribution(
+                Id=distributionId,
+                DistributionConfig=normalize_converted_config,
+                IfMatch=__get_distribution_etag(distributionId)
+            )
+            print("Configuration applied to distribution {}".format(distributionId))
+            input("Press Enter to continue...")
+            menu()
+        except botocore.exceptions.ClientError as CliError:
+            error_handler(CliError)
 
 # get current cloudfront distribution configuration etag
 def __get_distribution_etag(distributionId):
@@ -257,9 +277,9 @@ def __capitalize_json_elements(x):
 # helper method to convert a past config into a deployable config
 def __convert_history_item_into_next_config(config):
     new_config = json.loads(json.dumps(config['distributionConfig']))
-    new_config = __capitalize_json_elements(new_config)
-    new_config['ViewerCertificate']['SSLSupportMethod'] = new_config['ViewerCertificate'].pop(
-        'SslSupportMethod')  # manually changed, due to expected API format
+    #new_config = __capitalize_json_elements(new_config)
+    #new_config['ViewerCertificate']['SSLSupportMethod'] = new_config['ViewerCertificate'].pop(
+    #    'SslSupportMethod')  # manually changed, due to expected API format
 
     return new_config
 

@@ -1,6 +1,4 @@
 import yaml
-
-
 class MenuOptions:
     def __init__(self):
         with open('config.yaml', 'r') as config_file:

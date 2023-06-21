@@ -1,7 +1,7 @@
 case_mappings:
   waf:
   cloudfront:
-  route53:
+    file: '../data/reference_cloudfront.json'
 menu_options:
   waf:
     DisplayName: 'AWS WAF'
@@ -13,8 +13,3 @@ menu_options:
     ResourceTypes:
       - 'AWS::CloudFront::Distribution'
     ServiceName: 'cloudfront'
-  route53:
-    DisplayName: 'AWS Route53'
-    ResourceTypes:
-      - 'AWS::CloudFront::Distribution'
-    ServiceName: 'route53'
