@@ -1,0 +1,10 @@
+LICENSE
+README.md
+setup.py
+app/__init__.py
+app/loadconfigs.py
+app/normalizeparameters.py
+aws_config_restore.egg-info/PKG-INFO
+aws_config_restore.egg-info/SOURCES.txt
+aws_config_restore.egg-info/dependency_links.txt
+aws_config_restore.egg-info/top_level.txt

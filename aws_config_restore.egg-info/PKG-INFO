@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: aws-config-restore
+Version: 0.1
+Summary: Tool to restore configurations from AWS Config
+Home-page: https://github.com/arquitetura-cloud/aws-config-restore
+Author: CCoE Embratel
+Author-email: arquitetura-cloud@operacaomulticloud.com
+License: Apache 2.0
+License-File: LICENSE

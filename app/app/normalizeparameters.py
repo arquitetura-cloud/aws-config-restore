@@ -1,13 +1,12 @@
 import json
-from deepdiff import DeepDiff, DeepSearch, extract
-from app import loadconfigs
-import re
+from deepdiff import DeepSearch, extract
+
 new_to_restore_config_str = ""
 
 
 class NormalizeParameters:
     def __init__(self, to_restore_config, baseconfig=None):
-        with open('data/reference_cloudfront.json') as f:
+        with open('../data/reference_cloudfront.json') as f:
             self.base_config = json.load(f)
         f.close()
 

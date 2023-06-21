@@ -10,9 +10,6 @@ from deepdiff import DeepDiff
 import json
 from simple_term_menu import TerminalMenu
 from pygments import formatters, highlight, lexers
-import os
-import jmespath
-from pprint import pprint
 
 # local list storing all history about changes
 _hidden_config_list = []
