@@ -202,13 +202,34 @@ class MainHelper:
                         resourcename=resourcename
                     )
                 elif resourcetype == 'AWS::WAFv2::RuleGroup':
-                    pass
+
+                    wafhelper.apply_waf_configurations(
+                        resourceid=self.get_resource_id_by_name(resourcename, resourcetype),
+                        resourcetype=resourcetype,
+                        resource_configuration=normalize_converted_config,
+                        resourcename=resourcename
+                    )
                 elif resourcetype == 'AWS::WAFv2::IPSet':
-                    pass
+                    wafhelper.apply_waf_configurations(
+                        resourceid=self.get_resource_id_by_name(resourcename, resourcetype),
+                        resourcetype=resourcetype,
+                        resource_configuration=normalize_converted_config,
+                        resourcename=resourcename
+                    )
                 elif resourcetype == 'AWS::WAFv2::RegexPatternSet':
-                    pass
+                    wafhelper.apply_waf_configurations(
+                        resourceid=self.get_resource_id_by_name(resourcename, resourcetype),
+                        resourcetype=resourcetype,
+                        resource_configuration=normalize_converted_config,
+                        resourcename=resourcename
+                    )
                 elif resourcetype == 'AWS::WAFv2::ManagedRuleSet':
-                    pass
+                    wafhelper.apply_waf_configurations(
+                        resourceid=self.get_resource_id_by_name(resourcename, resourcetype),
+                        resourcetype=resourcetype,
+                        resource_configuration=normalize_converted_config,
+                        resourcename=resourcename
+                    )
                 print("Configuration applied to resource {}".format(resourcename))
 
                 return True
