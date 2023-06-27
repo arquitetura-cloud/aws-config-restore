@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: aws-config-restore
-Version: 0.1.1
+Version: 0.1.2
 Summary: AWS Config Restore tool restore previous configuration recorded in AWS Config Service
 Home-page: https://github.com/arquitetura-cloud/aws-config-restore
 Author: CCoE Embratel

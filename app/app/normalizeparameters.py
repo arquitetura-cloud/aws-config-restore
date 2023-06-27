@@ -5,19 +5,17 @@ new_to_restore_config_str = ""
 
 
 class NormalizeParameters:
-    def __init__(self, to_restore_config, baseconfig=None):
+    def __init__(self,baseconfig=None):
         datapath = os.path.join(os.path.dirname(__file__), '../data/reference_cloudfront.json')
         normpath = os.path.normpath(datapath)
         with open(normpath) as f:
             self.base_config = json.load(f)
         f.close()
 
-        self.to_restore_config = to_restore_config
-
-    def normalize(self):
+    def normalize(self, to_restore_config):
         global new_to_restore_config_str
 
-        new_to_restore_config_str = str(self.to_restore_config)
+        new_to_restore_config_str = str(to_restore_config)
 
         def parselist(data, counter, keyname):
             for i in range(len(data)):
@@ -61,7 +59,7 @@ class NormalizeParameters:
             newstring = "'" + newstring + "'"
             new_to_restore_config_str = new_to_restore_config_str.replace(oldstring, newstring)
 
-        for key, value in self.to_restore_config.items():
+        for key, value in to_restore_config.items():
             #print(f'{key} --> {search_deepdiff(key)}')
             update_parameters(key, search_deepdiff(key))
             if type(value) is list:

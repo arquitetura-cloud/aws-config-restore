@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aws-config-restore"
-version = "0.1.1"
+version = "0.2.0"
 description = "AWS Config Restore tool restore previous configuration recorded in AWS Config Service"
 readme = "README.md"
 authors = [{ name = "Embratel CCoE", email = "arquitetura-cloud@operacaomulticloud.com" }]
